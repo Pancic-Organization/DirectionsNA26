@@ -35,6 +35,7 @@ function DashboardNavigator() {
       <DashboardStack.Screen name="DashboardHome" component={DashboardScreen} />
       <DashboardStack.Screen name="OrderDetail" component={OrderDetailScreen} />
       <DashboardStack.Screen name="CreateOrder" component={CreateOrderScreen} />
+      <DashboardStack.Screen name="EditOrder" component={EditOrderScreen} />
     </DashboardStack.Navigator>
   );
 }

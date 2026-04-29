@@ -60,7 +60,7 @@ function buildQueryString(params?: ODataQueryParams): string {
 
 async function createClient(): Promise<AxiosInstance> {
   const token = await getAccessToken();
-  return axios.create({
+  const client = axios.create({
     baseURL: appConfig.bc.baseUrl,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -68,6 +68,23 @@ async function createClient(): Promise<AxiosInstance> {
       Accept: 'application/json',
     },
   });
+
+  // Retry once on 401 (token may have been revoked server-side)
+  client.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      if (error.response?.status === 401 && cachedToken) {
+        cachedToken = null;
+        tokenExpiry = 0;
+        const newToken = await getAccessToken();
+        error.config.headers.Authorization = `Bearer ${newToken}`;
+        return axios.request(error.config);
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  return client;
 }
 
 function handleApiError(error: unknown): never {

@@ -94,7 +94,7 @@ export default function EditOrderScreen() {
       await updatePurchaseOrder(orderId, {
         orderDate,
         requestedReceiptDate: receiptDate || undefined,
-      } as any);
+      } as any, order?.['@odata.etag']);
 
       // Update each line
       for (const line of lines) {
@@ -102,7 +102,7 @@ export default function EditOrderScreen() {
           quantity: line.quantity,
           directUnitCost: line.directUnitCost,
           discountPercent: line.discountPercent,
-        });
+        }, line['@odata.etag']);
       }
 
       Alert.alert('Saved', 'Order updated successfully.', [

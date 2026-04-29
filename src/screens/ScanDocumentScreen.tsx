@@ -122,7 +122,7 @@ export default function ScanDocumentScreen() {
           <View style={styles.scanArea}>
             <View style={styles.scanPlaceholder}>
               <MaterialCommunityIcons
-                name="file-document-scan-outline"
+                name="file-document-outline"
                 size={80}
                 color={colors.textTertiary}
               />

@@ -3,6 +3,7 @@
 // ==========================================
 
 export interface PurchaseOrder {
+  '@odata.etag'?: string;
   id: string;
   number: string;
   orderDate: string;
@@ -37,8 +38,8 @@ export interface PurchaseOrder {
 }
 
 export interface PurchaseOrderLine {
+  '@odata.etag'?: string;
   id: string;
-  documentId: string;
   sequence: number;
   itemId: string;
   lineType: 'Item' | 'Account' | 'Resource';
@@ -187,6 +188,7 @@ export type DashboardStackParamList = {
   DashboardHome: undefined;
   OrderDetail: { orderId: string };
   CreateOrder: { prefillData?: DraftOrder };
+  EditOrder: { orderId: string };
 };
 
 export type OrdersStackParamList = {

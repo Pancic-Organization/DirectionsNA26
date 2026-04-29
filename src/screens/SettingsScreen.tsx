@@ -33,8 +33,12 @@ export default function SettingsScreen({ onLogout }: SettingsScreenProps) {
   }, []);
 
   const loadUser = async () => {
-    const data = await AsyncStorage.getItem('userProfile');
-    if (data) setUser(JSON.parse(data));
+    try {
+      const data = await AsyncStorage.getItem('userProfile');
+      if (data) setUser(JSON.parse(data));
+    } catch {
+      // ignore corrupted data
+    }
   };
 
   const checkConnection = async () => {
@@ -53,9 +57,11 @@ export default function SettingsScreen({ onLogout }: SettingsScreenProps) {
           // Keep login state, clear other keys
           const keys = await AsyncStorage.getAllKeys();
           const keysToRemove = keys.filter(
-            (k) => k !== 'isLoggedIn' && k !== 'userProfile'
+            (k: string) => k !== 'isLoggedIn' && k !== 'userProfile'
           );
-          await AsyncStorage.multiRemove(keysToRemove);
+          for (const key of keysToRemove) {
+            await AsyncStorage.removeItem(key);
+          }
           Alert.alert('Done', 'Cache cleared successfully.');
         },
       },
